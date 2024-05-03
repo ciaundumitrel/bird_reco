@@ -1,6 +1,4 @@
 import numpy as np
-from scipy.io import wavfile
-from scipy import fft
 import matplotlib.pyplot as plt
 from pydub import AudioSegment
 import librosa
@@ -30,5 +28,5 @@ def spectrogram_(file):
 
 if __name__ == "__main__":
     # spectrogram_(r'C:\dumi\bird_recognizer\data\greattit_\724372.wav')
-    spectrogram_(r'C:\dumi\IP\fastApiProject1\sound_.wav')
+    spectrogram_(r'D:\DSUsers\uie32539\bird_reco\sounds\724642_reduced.wav')
     # spectrogram_(r'C:\dumi\bird_recognizer\data\greattit_\724845.wav')
