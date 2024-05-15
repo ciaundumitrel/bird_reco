@@ -6,9 +6,9 @@ import os
 #          "White Stork", "House Sparrow", "Great Egret", "Eurasian Jay", "Eurasian Magpie", "Rook",
 #          "Western Marsh Harrier", "Fieldfare", "Commmon Raven", "Eurasian Tree Sparrow"]
 
-birds = ["HouseSparrow"]
+birds = ["House Sparrow"]
 dir_for_birds = {
-    'HouseSparrow': 'HouseSparrow',
+    'House Sparrow': 'HouseSparrow',
 }
 MAIN_DIR = os.getcwd()
 

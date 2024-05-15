@@ -10,8 +10,6 @@ from utils import birds, dir_for_birds
 import pydub
 from pydub.exceptions import CouldntDecodeError
 
-pydub.AudioSegment.ffmpeg = r"C:\\Users\\uie32539\\AppData\\Local\\ffmpegio\\ffmpeg-downloader\\ffmpeg"
-
 
 def to_wav(bird, path):
     bird_dir = os.path.join(path, 'sounds', bird)
@@ -86,19 +84,24 @@ def reduce_noise_(directory, sound_name, save_to):
 
 def split_bird(bird, path):
     bird_dir = os.path.join(path, 'sounds', bird)
-    bird_dir_sounds = os.path.join(bird_dir, dir_for_birds[bird])
+    bird_dir_sounds = os.path.join(bird_dir, f"{dir_for_birds[bird]}_reduced")
     os.chdir(bird_dir)
-    os.mkdir('splits')
+    try:
+        os.mkdir('splits')
+    except FileExistsError as e:
+        pass
+    file_count = 0
     for file in os.listdir(bird_dir_sounds):
-        splits = split(file)
-        save_slips(bird, splits)
-
+        splits = split(file, f"{bird_dir_sounds}\\")
+        print(len(splits), f" from {file}")
+        save_slips(bird, splits, file_count)
+        file_count += len(splits)
     os.chdir(path)
 
 
-
-def split(filepath):
-    sound = AudioSegment.from_file(filepath)
+def split(file, path):
+    print(file)
+    sound = AudioSegment.from_file(path + file)
     chunks = split_on_silence(
         sound,
         min_silence_len=500,
@@ -108,11 +111,11 @@ def split(filepath):
     return chunks
 
 
-def save_slips(bird_name, splits):
-    export_path = os.path.join('..', 'sounds',bird_name, 'splits')
-    os.chdir(export_path)
+def save_slips(bird_name, splits, file_count):
+    export_path = os.path.join('.', 'splits')
     for _, split in enumerate(splits):
-        split.export(f"{bird_name.split('.')[0]}_{_}.wav", format="wav")
+        split.export(f"{export_path}/{bird_name.split('.')[0]}_{file_count}.wav", format="wav")
+        file_count += 1
 
 
 def reduce_bird(bird, path):
@@ -132,9 +135,14 @@ def reduce_bird(bird, path):
     for file in os.listdir(bird_dir_sounds):
         reduce_noise_(directory=bird_dir_sounds, sound_name=file, save_to=reduced_dir)
 
+    os.chdir(path)
 
-# if __name__ == "__main__":
-#     rate, data = wavfile.read(r"D:\DSUsers\uie32539\bird_reco\sounds\724642.wav")
-#     reduced_noise = nr.reduce_noise(y=data, sr=rate)
-#     reduced_file_name = fr"D:\DSUsers\uie32539\bird_reco\sounds\724642__reduced.wav"
-#     wavfile.write(reduced_file_name, 44000, reduced_noise)
+if __name__ == "__main__":
+    # rate, data = wavfile.read(r"D:\DSUsers\uie32539\bird_reco\sounds\724642.wav")
+    # reduced_noise = nr.reduce_noise(y=data, sr=rate)
+    reduced_file_name = fr"D:\DSUsers\uie32539\bird_reco\sounds\House Sparrow\HouseSparrow_reduced\806713_reduced.wav"
+    # wavfile.write(reduced_file_name, 44000, reduced_noise)
+
+    split_bird("House Sparrow", os.getcwd())
+
+    # print(split(reduced_file_name))
