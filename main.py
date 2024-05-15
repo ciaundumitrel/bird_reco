@@ -1,16 +1,21 @@
 import os
 import pydub
 
-from sound_processing.sound_processing import reduce_bird, to_wav
+from sound_processing.sound_processing import reduce_bird, to_wav, split_bird
 from utils import *
+from xeno_wrapper.xeno_wrapper import download_sounds
 
 
 def main():
-
     for bird in birds:
         # to_wav(bird, os.getcwd())
         reduce_bird(bird, os.getcwd())
 
 
 if __name__ == "__main__":
-    main()
+    download_sounds()
+    for bird in birds:
+        to_wav(bird, os.getcwd())
+        reduce_bird(bird, os.getcwd())
+        split_bird(bird, os.getcwd())
+

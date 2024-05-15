@@ -84,6 +84,19 @@ def reduce_noise_(directory, sound_name, save_to):
     return reduced_file_name
 
 
+def split_bird(bird, path):
+    bird_dir = os.path.join(path, 'sounds', bird)
+    bird_dir_sounds = os.path.join(bird_dir, dir_for_birds[bird])
+    os.chdir(bird_dir)
+    os.mkdir('splits')
+    for file in os.listdir(bird_dir_sounds):
+        splits = split(file)
+        save_slips(bird, splits)
+
+    os.chdir(path)
+
+
+
 def split(filepath):
     sound = AudioSegment.from_file(filepath)
     chunks = split_on_silence(
@@ -96,7 +109,7 @@ def split(filepath):
 
 
 def save_slips(bird_name, splits):
-    export_path = os.path.join('..', 'sounds', 'splits')
+    export_path = os.path.join('..', 'sounds',bird_name, 'splits')
     os.chdir(export_path)
     for _, split in enumerate(splits):
         split.export(f"{bird_name.split('.')[0]}_{_}.wav", format="wav")
