@@ -5,9 +5,9 @@ import os
 from pydub.silence import split_on_silence
 from scipy.io import wavfile
 import noisereduce as nr
-from pydub import AudioSegment
-from utils import birds, dir_for_birds
+
 import pydub
+from utils import birds, dir_for_birds
 from pydub.exceptions import CouldntDecodeError
 
 
@@ -36,8 +36,8 @@ def to_wav(bird, path):
         print(file)
         try:
             if '.mp3' in mp3_file_path:
-                sound = AudioSegment.from_mp3(mp3_file_path)  # Load the MP3 file
-                sound.export(f"{file.split('.')[0]}.wav", bitrate=16000, format="wav")
+                sound = pydub.AudioSegment.from_mp3(mp3_file_path)  # Load the MP3 file
+                sound.export(f"{file.split('.')[0]}.wav", bitrate=16000, format="wav", )
                 converted_files.append(file)
         except CouldntDecodeError as e:
             failed_files.append(file)
@@ -47,7 +47,7 @@ def to_wav(bird, path):
     for file in failed_files:
         try:
             mp3_file_path = os.path.join(os.getcwd(), file)  # Construct the full file path
-            sound = AudioSegment.from_file(mp3_file_path, format='mp4')  # Load the MP3 file
+            sound = pydub.AudioSegment.from_file(mp3_file_path, format='mp4')  # Load the MP3 file
             sound.export(f"{file.split('.')[0]}.wav", format="wav")
             converted_files.append(file)
         except:
@@ -101,7 +101,7 @@ def split_bird(bird, path):
 
 def split(file, path):
     print(file)
-    sound = AudioSegment.from_file(path + file)
+    sound = pydub.AudioSegment.from_file(path + file)
     chunks = split_on_silence(
         sound,
         min_silence_len=500,
@@ -114,7 +114,7 @@ def split(file, path):
 def save_slips(bird_name, splits, file_count):
     export_path = os.path.join('.', 'splits')
     for _, split in enumerate(splits):
-        split.export(f"{export_path}/{bird_name.split('.')[0]}_{file_count}.wav", format="wav")
+        split.export(f"{export_path}/{bird_name.split('.')[0]}_{file_count}.wav", format="wav", bitrate='16k')
         file_count += 1
 
 
@@ -140,9 +140,9 @@ def reduce_bird(bird, path):
 if __name__ == "__main__":
     # rate, data = wavfile.read(r"D:\DSUsers\uie32539\bird_reco\sounds\724642.wav")
     # reduced_noise = nr.reduce_noise(y=data, sr=rate)
-    reduced_file_name = fr"D:\DSUsers\uie32539\bird_reco\sounds\House Sparrow\HouseSparrow_reduced\806713_reduced.wav"
+    # reduced_file_name = fr"D:\DSUsers\uie32539\bird_reco\sounds\House Sparrow\HouseSparrow_reduced\806713_reduced.wav"
     # wavfile.write(reduced_file_name, 44000, reduced_noise)
-
-    split_bird("House Sparrow", os.getcwd())
-
+    #
+    # split_bird("House Sparrow", os.getcwd())
+    pass
     # print(split(reduced_file_name))

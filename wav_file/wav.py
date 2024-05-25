@@ -6,13 +6,11 @@ def write_wav(file):
     with open(r"C:\dumi\IP\fastApiProject1\received.txt", 'rb') as f:
 
         data = base64.b64decode(f.read())
-
         obj = wave.open(file, 'wb')
         obj.setnchannels(1)
-        obj.setsampwidth(2)
+        obj.setsampwidth(1)
         obj.setframerate(48000)
         obj.writeframes(data)
-
         obj.close()
 
 def main():
